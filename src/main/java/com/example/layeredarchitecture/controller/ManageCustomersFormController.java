@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.dao.CustomerDAO;
 import com.example.layeredarchitecture.dao.customerDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -37,6 +38,8 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
+    CustomerDAO customerDAO= new customerDAOImpl();
+
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -76,7 +79,7 @@ public class ManageCustomersFormController {
 //            while (rst.next()) {
 //                tblCustomers.getItems().add(new CustomerTM(rst.getString("id"), rst.getString("name"), rst.getString("address")));
 //            }
-            customerDAOImpl customerDAO= new customerDAOImpl();
+//            customerDAOImpl customerDAO= new customerDAOImpl();
             ArrayList<CustomerDTO> allCustomer = customerDAO.gellAllCustomer();
             for (CustomerDTO dto :allCustomer){
                 tblCustomers.getItems().add(
@@ -159,7 +162,7 @@ public class ManageCustomersFormController {
 //                pstm.setString(2, name);
 //                pstm.setString(3, address);
 //                pstm.executeUpdate();
-                customerDAOImpl customerDAO = new customerDAOImpl();
+//                customerDAOImpl customerDAO = new customerDAOImpl();
                 boolean isSaved = customerDAO.saveCustomer(new CustomerDTO(id, name, address));
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -183,7 +186,7 @@ public class ManageCustomersFormController {
 //                pstm.setString(2, address);
 //                pstm.setString(3, id);
 //                pstm.executeUpdate();
-                customerDAOImpl customerDAO = new customerDAOImpl();
+//                customerDAOImpl customerDAO = new customerDAOImpl();
                 boolean isUpdated = customerDAO.updateCustomer(new CustomerDTO(id, name, address));
 //                if (isUpdated) {
 //                    tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -209,7 +212,7 @@ public class ManageCustomersFormController {
 //        PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
 //        pstm.setString(1, id);
 //        return pstm.executeQuery().next();
-        customerDAOImpl customerDAO = new customerDAOImpl();
+//        customerDAOImpl customerDAO = new customerDAOImpl();
         return customerDAO.existCustomer(id);
     }
 
@@ -225,7 +228,7 @@ public class ManageCustomersFormController {
 //            PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
 //            pstm.setString(1, id);
 //            pstm.executeUpdate();
-            customerDAOImpl customerDAO = new customerDAOImpl();
+//            customerDAOImpl customerDAO = new customerDAOImpl();
             customerDAO.deleteCustomer(id);
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
@@ -243,7 +246,7 @@ public class ManageCustomersFormController {
         try {
 //            Connection connection = DBConnection.getDbConnection().getConnection();
 //            ResultSet rst = connection.createStatement().executeQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
-            customerDAOImpl customerDAO = new customerDAOImpl();
+//            customerDAOImpl customerDAO = new customerDAOImpl();
             ResultSet rst = customerDAO.generateId();
             if (rst.next()) {
                 String id = rst.getString("id");

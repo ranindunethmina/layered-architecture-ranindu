@@ -59,4 +59,7 @@ public class customerDAOImpl {
 
         return rst;
     }
+    public void searchCustomer(){
+
+    }
 }

@@ -38,7 +38,7 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
-    CustomerDAO customerDAO= new customerDAOImpl();
+    CustomerDAO customerDAO= new customerDAOImpl(); //property injection
 
 
     public void initialize() {
@@ -80,7 +80,9 @@ public class ManageCustomersFormController {
 //                tblCustomers.getItems().add(new CustomerTM(rst.getString("id"), rst.getString("name"), rst.getString("address")));
 //            }
 //            customerDAOImpl customerDAO= new customerDAOImpl();
+
             ArrayList<CustomerDTO> allCustomer = customerDAO.gellAllCustomer();
+
             for (CustomerDTO dto :allCustomer){
                 tblCustomers.getItems().add(
                         new CustomerTM(
@@ -163,7 +165,9 @@ public class ManageCustomersFormController {
 //                pstm.setString(3, address);
 //                pstm.executeUpdate();
 //                customerDAOImpl customerDAO = new customerDAOImpl();
+
                 boolean isSaved = customerDAO.saveCustomer(new CustomerDTO(id, name, address));
+
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
                 }
@@ -187,8 +191,10 @@ public class ManageCustomersFormController {
 //                pstm.setString(3, id);
 //                pstm.executeUpdate();
 //                customerDAOImpl customerDAO = new customerDAOImpl();
-                boolean isUpdated = customerDAO.updateCustomer(new CustomerDTO(id, name, address));
-//                if (isUpdated) {
+
+            boolean isUpdated = customerDAO.updateCustomer(new CustomerDTO(id, name, address));
+
+                //                if (isUpdated) {
 //                    tblCustomers.getItems().add(new CustomerTM(id, name, address));
 //                }
             } catch (SQLException e) {
@@ -247,7 +253,9 @@ public class ManageCustomersFormController {
 //            Connection connection = DBConnection.getDbConnection().getConnection();
 //            ResultSet rst = connection.createStatement().executeQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
 //            customerDAOImpl customerDAO = new customerDAOImpl();
-            ResultSet rst = customerDAO.generateId();
+
+        ResultSet rst = customerDAO.generateId();
+
             if (rst.next()) {
                 String id = rst.getString("id");
                 int newCustomerId = Integer.parseInt(id.replace("C00-", "")) + 1;

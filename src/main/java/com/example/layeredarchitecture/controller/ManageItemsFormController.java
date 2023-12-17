@@ -84,7 +84,9 @@ public class ManageItemsFormController {
 //                tblItems.getItems().add(new ItemTM(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand")));
 //            }
 //            itemDAOImpl itemDAO = new itemDAOImpl();
+
             ArrayList<ItemDTO> allItem = itemDAO.getAllItem();
+
             for (ItemDTO dto :allItem){
                 tblItems.getItems().add(
                         new ItemTM(
@@ -155,11 +157,13 @@ public class ManageItemsFormController {
 //            pstm.setString(1, code);
 //            pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
+
             itemDAO.deleteItem(code);
 
             tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
             tblItems.getSelectionModel().clearSelection();
             initUI();
+
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the item " + code).show();
         } catch (ClassNotFoundException e) {
@@ -203,11 +207,12 @@ public class ManageItemsFormController {
 //                pstm.setInt(4, qtyOnHand);
 //                pstm.executeUpdate();
 //                itemDAOImpl itemDAO = new itemDAOImpl();
+
                 boolean isSaved = itemDAO.addItem(new ItemDTO(code, description, unitPrice,qtyOnHand));
+
                 if (isSaved) {
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
                 }
-               // tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
 
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -229,7 +234,9 @@ public class ManageItemsFormController {
 //                pstm.setString(4, code);
 //                pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
-            itemDAO.updateItem(new ItemDTO(code,description,unitPrice,qtyOnHand));
+
+                itemDAO.updateItem(new ItemDTO(code,description,unitPrice,qtyOnHand));
+
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                 selectedItem.setDescription(description);
                 selectedItem.setQtyOnHand(qtyOnHand);
@@ -261,7 +268,9 @@ public class ManageItemsFormController {
 //            Connection connection = DBConnection.getDbConnection().getConnection();
 //            ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
 //            itemDAOImpl itemDAO = new itemDAOImpl();
+
             ResultSet rst = itemDAO.generateId();
+
             if (rst.next()) {
                 String id = rst.getString("code");
                 int newItemId = Integer.parseInt(id.replace("I00-", "")) + 1;

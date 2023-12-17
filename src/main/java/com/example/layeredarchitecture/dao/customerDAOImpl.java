@@ -12,6 +12,7 @@ public class customerDAOImpl implements CustomerDAO {
         Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
+
         ArrayList<CustomerDTO> allCustomer = new ArrayList<>();
 
         while (rst.next()){
@@ -30,6 +31,7 @@ public class customerDAOImpl implements CustomerDAO {
         pstm.setString(1, customerDTO.getId());
         pstm.setString(2, customerDTO.getName());
         pstm.setString(3, customerDTO.getAddress());
+
         return pstm.executeUpdate() > 0 ;
 
     }
@@ -40,6 +42,7 @@ public class customerDAOImpl implements CustomerDAO {
         pstm.setString(1, customerDTO.getName());
         pstm.setString(2, customerDTO.getAddress());
         pstm.setString(3, customerDTO.getId());
+
         return pstm.executeUpdate() > 0;
     }
     @Override
@@ -47,6 +50,7 @@ public class customerDAOImpl implements CustomerDAO {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
         pstm.setString(1, id);
+
         return pstm.executeQuery().next();
     }
 

@@ -6,14 +6,14 @@ import com.example.layeredarchitecture.model.ItemDTO;
 import java.sql.*;
 import java.util.ArrayList;
 
-
-
-public class itemDAOImpl implements ItemDAO{
+public class itemDAOImpl implements ItemDAO {
     public ArrayList<ItemDTO> getAllItem() throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Item");
+
         ArrayList<ItemDTO> allItem = new ArrayList<>();
+
         while (rst.next()) {
             ItemDTO itemDTO = new ItemDTO(
                     rst.getString("code"),
@@ -31,6 +31,7 @@ public class itemDAOImpl implements ItemDAO{
         pstm.setString(2, itemDTO.getDescription());
         pstm.setBigDecimal(3, itemDTO.getUnitPrice());
         pstm.setInt(4, itemDTO.getQtyOnHand());
+
         return pstm.executeUpdate() > 0;
     }
 
@@ -41,12 +42,14 @@ public class itemDAOImpl implements ItemDAO{
         pstm.setBigDecimal(2, itemDTO.getUnitPrice());
         pstm.setInt(3, itemDTO.getQtyOnHand());
         pstm.setString(4, itemDTO.getCode());
+
         return pstm.executeUpdate() > 0;
     }
     public boolean existItem(String code) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
         pstm.setString(1, code);
+
         return pstm.executeQuery().next();
     }
 
@@ -61,5 +64,21 @@ public class itemDAOImpl implements ItemDAO{
         ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
 
         return rst;
+    }
+
+    @Override
+    public ItemDTO findItem(String newItemCode) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
+        pstm.setString(1, newItemCode + "");
+        ResultSet rst = pstm.executeQuery();
+        rst.next();
+
+        return new ItemDTO(
+                rst.getString(1),
+                rst.getString(2),
+                rst.getBigDecimal(3),
+                rst.getInt(4)
+        );
     }
 }

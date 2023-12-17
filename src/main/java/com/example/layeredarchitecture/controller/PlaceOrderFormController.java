@@ -403,6 +403,7 @@ public class PlaceOrderFormController {
 //                    return false;
 //                }
             orderDAO.selectOrderId(orderId);
+
             isOrderSaved = orderDAO.saveOrder(orderId, orderDate, customerId);
 
             for (OrderDetailDTO detail : orderDetails) {
@@ -411,6 +412,7 @@ public class PlaceOrderFormController {
                 //                //Search & Update Item
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
+
                 isItemUpdated = itemDAO.updateItem(item);
             }
 //                PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");

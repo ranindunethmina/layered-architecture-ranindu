@@ -117,9 +117,10 @@ public class PlaceOrderFormController {
 //                        CustomerDTO customerDTO = new CustomerDTO(newValue + "", rst.getString("name"), rst.getString("address"));
 
 //                        txtCustomerName.setText(customerDTO.getName());
-
-                        String isname = customerDAO.searchCustomer(newValue);
-                        txtCustomerName.setText(isname);
+                        CustomerDTO customerDTO = customerDAO.search(newValue + "");
+                        txtCustomerName.setText(customerDTO.getName());
+//                        String isname = customerDAO.search(newValue);
+//                        txtCustomerName.setText(isname);
                     } catch (SQLException e) {
                         new Alert(Alert.AlertType.ERROR, "Failed to find the customer " + newValue + "" + e).show();
                     }
@@ -150,7 +151,7 @@ public class PlaceOrderFormController {
 //                    ResultSet rst = pstm.executeQuery();
 //                    rst.next();
 //                    ItemDTO dto = new ItemDTO(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
-                    ItemDTO dto = itemDAO.findItem(newItemCode);
+                    ItemDTO dto = itemDAO.search(newItemCode);
                     ItemDTO item = new ItemDTO(newItemCode + "",
                             dto.getDescription(),
                             dto.getUnitPrice(),
@@ -203,7 +204,7 @@ public class PlaceOrderFormController {
 //        PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
 //        pstm.setString(1, code);
 //        return pstm.executeQuery().next();
-        return itemDAO.existItem(code);
+        return itemDAO.exist(code);
 
     }
 
@@ -213,7 +214,7 @@ public class PlaceOrderFormController {
 //        pstm.setString(1, id);
 //        return pstm.executeQuery().next();
 
-        return customerDAO.existCustomer(id);
+        return customerDAO.exist(id);
 
     }
 
@@ -239,7 +240,7 @@ public class PlaceOrderFormController {
 //            Statement stm = connection.createStatement();
 //            ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
 
-            ArrayList<CustomerDTO> allCustomer = customerDAO.gellAllCustomer();
+            ArrayList<CustomerDTO> allCustomer = customerDAO.getAll();
 
             for (CustomerDTO dto : allCustomer) {
                 cmbCustomerId.getItems().add(dto.getId());
@@ -265,7 +266,7 @@ public class PlaceOrderFormController {
 //            while (rst.next()) {
 //                cmbItemCode.getItems().add(rst.getString("code"));
 //            }
-            ArrayList<ItemDTO> allItems = itemDAO.getAllItem();
+            ArrayList<ItemDTO> allItems = itemDAO.getAll();
 
             for (ItemDTO itemDTO : allItems) {
                 cmbItemCode.getItems().add(itemDTO.getCode());
@@ -380,7 +381,7 @@ public class PlaceOrderFormController {
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
-                isItemUpdated = itemDAO.updateItem(item);
+                isItemUpdated = itemDAO.update(item);
             }
 
             if (isOrderSaved && isOrderDetailSaved && isItemUpdated) {
@@ -405,7 +406,7 @@ public class PlaceOrderFormController {
 //            pstm.setString(1, code);
 //            ResultSet rst = pstm.executeQuery();
 //            rst.next();
-            ItemDTO dto = itemDAO.findItem(code);
+            ItemDTO dto = itemDAO.search(code);
 
             return new ItemDTO(code,
                     dto.getDescription(),

@@ -81,7 +81,7 @@ public class ManageCustomersFormController {
 //            }
 //            customerDAOImpl customerDAO= new customerDAOImpl();
 
-            ArrayList<CustomerDTO> allCustomer = customerDAO.gellAllCustomer();
+            ArrayList<CustomerDTO> allCustomer = customerDAO.getAll();
 
             for (CustomerDTO dto :allCustomer){
                 tblCustomers.getItems().add(
@@ -166,7 +166,7 @@ public class ManageCustomersFormController {
 //                pstm.executeUpdate();
 //                customerDAOImpl customerDAO = new customerDAOImpl();
 
-                boolean isSaved = customerDAO.saveCustomer(new CustomerDTO(id, name, address));
+                boolean isSaved = customerDAO.save(new CustomerDTO(id, name, address));
 
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -192,7 +192,7 @@ public class ManageCustomersFormController {
 //                pstm.executeUpdate();
 //                customerDAOImpl customerDAO = new customerDAOImpl();
 
-            customerDAO.updateCustomer(new CustomerDTO(id, name, address));
+            customerDAO.update(new CustomerDTO(id, name, address));
 
                 //                if (isUpdated) {
 //                    tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -219,7 +219,7 @@ public class ManageCustomersFormController {
 //        pstm.setString(1, id);
 //        return pstm.executeQuery().next();
 //        customerDAOImpl customerDAO = new customerDAOImpl();
-        return customerDAO.existCustomer(id);
+        return customerDAO.exist(id);
     }
 
 
@@ -235,7 +235,7 @@ public class ManageCustomersFormController {
 //            pstm.setString(1, id);
 //            pstm.executeUpdate();
 //            customerDAOImpl customerDAO = new customerDAOImpl();
-            customerDAO.deleteCustomer(id);
+            customerDAO.delete(id);
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
             tblCustomers.getSelectionModel().clearSelection();

@@ -18,7 +18,7 @@ public class OrderDAOImpl implements OrderDAO{
 
     @Override
     public void selectOrderId(String orderId) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
+        Connection connection = TransactionConnection.setConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
         stm.setString(1, orderId);
         /*if order id already exist*/

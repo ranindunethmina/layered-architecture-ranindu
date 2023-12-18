@@ -74,11 +74,14 @@ public class itemDAOImpl implements ItemDAO {
         ResultSet rst = pstm.executeQuery();
         rst.next();
 
-        return new ItemDTO(
+     /*   return new ItemDTO(
                 rst.getString(1),
                 rst.getString(2),
                 rst.getBigDecimal(3),
                 rst.getInt(4)
-        );
+        );*/
+
+        ItemDTO item = new ItemDTO (newItemCode+"", rst.getString("description"),rst.getBigDecimal("unitPrice"),rst.getInt("qtyOnHand"));
+        return item;
     }
 }

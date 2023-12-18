@@ -9,11 +9,12 @@ import java.time.LocalDate;
 public class OrderDAOImpl implements OrderDAO{
     @Override
     public ResultSet generateNewOrderId() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
-
-        return rst;
+//        Connection connection = DBConnection.getDbConnection().getConnection();
+//        Statement stm = connection.createStatement();
+//        ResultSet rst = stm.executeQuery("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
+//
+//        return rst;
+        return SQLUtil.excute("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
     }
 
     @Override

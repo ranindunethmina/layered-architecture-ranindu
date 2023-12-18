@@ -192,7 +192,7 @@ public class ManageCustomersFormController {
 //                pstm.executeUpdate();
 //                customerDAOImpl customerDAO = new customerDAOImpl();
 
-            boolean isUpdated = customerDAO.updateCustomer(new CustomerDTO(id, name, address));
+            customerDAO.updateCustomer(new CustomerDTO(id, name, address));
 
                 //                if (isUpdated) {
 //                    tblCustomers.getItems().add(new CustomerTM(id, name, address));

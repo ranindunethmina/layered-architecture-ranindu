@@ -14,6 +14,7 @@ public class customerDAOImpl implements CustomerDAO {
 //        Statement stm = connection.createStatement();
 //        ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
         ResultSet rst = SQLUtil.excute("SELECT * FROM Customer");
+
         ArrayList<CustomerDTO> allCustomer = new ArrayList<>();
 
         while (rst.next()){
@@ -57,16 +58,14 @@ public class customerDAOImpl implements CustomerDAO {
        ResultSet resultSet = SQLUtil.excute("SELECT id FROM Customer WHERE id=?",id);
        return  resultSet.next();
     }
-
     @Override
-    public void delete(String id) throws SQLException, ClassNotFoundException {
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
 //        pstm.setString(1, id);
 //        pstm.executeUpdate();
-        SQLUtil.excute("DELETE FROM Customer WHERE id=?",id);
+       return SQLUtil.excute("DELETE FROM Customer WHERE id=?",id);
     }
-
     @Override
     public ResultSet generateId() throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
@@ -85,8 +84,10 @@ public class customerDAOImpl implements CustomerDAO {
 //        rst.next();
 //        String name = rst.getString("name");
 //        return name;
+
         ResultSet rst = SQLUtil.excute("SELECT * FROM Customer WHERE id=?",id);
         rst.next();
         return new CustomerDTO(id + "", rst.getString("name"), rst.getString("address"));
     }
+
 }

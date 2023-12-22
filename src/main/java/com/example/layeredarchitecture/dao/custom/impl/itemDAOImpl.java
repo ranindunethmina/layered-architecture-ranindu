@@ -15,6 +15,7 @@ public class itemDAOImpl implements ItemDAO {
 //        ResultSet rst = stm.executeQuery("SELECT * FROM Item");
 //
         ResultSet rst = SQLUtil.excute("SELECT * FROM Item");
+
         ArrayList<ItemDTO> allItem = new ArrayList<>();
 
         while (rst.next()) {
@@ -27,6 +28,7 @@ public class itemDAOImpl implements ItemDAO {
         }
         return allItem;
     }
+
     public boolean save(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)");
@@ -38,7 +40,6 @@ public class itemDAOImpl implements ItemDAO {
 //        return pstm.executeUpdate() > 0;
         return SQLUtil.excute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",itemDTO.getCode(),itemDTO.getDescription(),itemDTO.getUnitPrice(),itemDTO.getQtyOnHand());
     }
-
     public boolean update(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
@@ -61,12 +62,12 @@ public class itemDAOImpl implements ItemDAO {
         return  resultSet.next();
     }
 
-    public void delete(String code) throws SQLException, ClassNotFoundException {
+    public boolean delete(String code) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
 //        pstm.setString(1, code);
 //        pstm.executeUpdate();
-        SQLUtil.excute("DELETE FROM Item WHERE code=?",code);
+       return SQLUtil.excute("DELETE FROM Item WHERE code=?",code);
     }
     public ResultSet generateId() throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
@@ -75,15 +76,12 @@ public class itemDAOImpl implements ItemDAO {
 //        return rst;
         return SQLUtil.excute("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
     }
-
     @Override
     public ItemDTO search(String newItemCode) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
 //        pstm.setString(1, newItemCode + "");
 //        ResultSet rst = pstm.executeQuery();
-        ResultSet rst =SQLUtil.excute("SELECT * FROM Item WHERE code=?",newItemCode);
-        rst.next();
 
      /*   return new ItemDTO(
                 rst.getString(1),
@@ -91,8 +89,10 @@ public class itemDAOImpl implements ItemDAO {
                 rst.getBigDecimal(3),
                 rst.getInt(4)
         );*/
-
-        ItemDTO item = new ItemDTO (newItemCode+"", rst.getString("description"),rst.getBigDecimal("unitPrice"),rst.getInt("qtyOnHand"));
-        return item;
+        ResultSet rst =SQLUtil.excute("SELECT * FROM Item WHERE code=?",newItemCode);
+        rst.next();
+        return new ItemDTO (newItemCode+"", rst.getString("description"),rst.getBigDecimal("unitPrice"),rst.getInt("qtyOnHand"));
+//      return item;
     }
+
 }

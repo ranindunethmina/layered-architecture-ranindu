@@ -9,7 +9,6 @@ public class CustomerTM implements Comparable<CustomerTM> {
 
     public CustomerTM() {
     }
-
     public CustomerTM(String id, String name, String address) {
         this.id = id;
         this.name = name;
@@ -31,15 +30,12 @@ public class CustomerTM implements Comparable<CustomerTM> {
     public void setName(String name) {
         this.name = name;
     }
-
     public String getAddress() {
         return address;
     }
-
     public void setAddress(String address) {
         this.address = address;
     }
-
     @Override
     public String toString() {
         return "CustomerTM{" +
@@ -48,10 +44,9 @@ public class CustomerTM implements Comparable<CustomerTM> {
                 ", address='" + address + '\'' +
                 '}';
     }
-
-
     @Override
     public int compareTo(CustomerTM o) {
         return id.compareTo(o.getId());
     }
+
 }

@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-
 public class ManageCustomersFormController {
     public AnchorPane root;
     public TextField txtCustomerName;
@@ -66,7 +64,6 @@ public class ManageCustomersFormController {
         txtCustomerAddress.setOnAction(event -> btnSave.fire());
         loadAllCustomers();
     }
-
     private void loadAllCustomers() {
         tblCustomers.getItems().clear();
         /*Get all customers*/
@@ -97,7 +94,6 @@ public class ManageCustomersFormController {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-
     private void initUI() {
         txtCustomerId.clear();
         txtCustomerName.clear();
@@ -109,7 +105,6 @@ public class ManageCustomersFormController {
         btnSave.setDisable(true);
         btnDelete.setDisable(true);
     }
-
     @FXML
     private void navigateToHome(MouseEvent event) throws IOException {
         URL resource = this.getClass().getResource("/com/example/layeredarchitecture/main-form.fxml");
@@ -120,7 +115,6 @@ public class ManageCustomersFormController {
         primaryStage.centerOnScreen();
         Platform.runLater(() -> primaryStage.sizeToScene());
     }
-
     public void btnAddNew_OnAction(ActionEvent actionEvent) {
         txtCustomerId.setDisable(false);
         txtCustomerName.setDisable(false);
@@ -134,8 +128,6 @@ public class ManageCustomersFormController {
         btnSave.setText("Save");
         tblCustomers.getSelectionModel().clearSelection();
     }
-
-
     public void btnSave_OnAction(ActionEvent actionEvent) {
         String id = txtCustomerId.getText();
         String name = txtCustomerName.getText();
@@ -176,7 +168,6 @@ public class ManageCustomersFormController {
                 e.printStackTrace();
             }
 
-
         } else {
             /*Update customer*/
             try {
@@ -191,11 +182,8 @@ public class ManageCustomersFormController {
 //                pstm.executeUpdate();
 //                customerDAOImpl customerDAO = new customerDAOImpl();
 
-            customerDAO.update(new CustomerDTO(id, name, address));
+                  customerDAO.update(new CustomerDTO(id, name, address));
 
-                //                if (isUpdated) {
-//                    tblCustomers.getItems().add(new CustomerTM(id, name, address));
-//                }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
@@ -210,8 +198,6 @@ public class ManageCustomersFormController {
 
         btnAddNewCustomer.fire();
     }
-
-
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
@@ -220,8 +206,6 @@ public class ManageCustomersFormController {
 //        customerDAOImpl customerDAO = new customerDAOImpl();
         return customerDAO.exist(id);
     }
-
-
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         /*Delete Customer*/
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
@@ -234,19 +218,20 @@ public class ManageCustomersFormController {
 //            pstm.setString(1, id);
 //            pstm.executeUpdate();
 //            customerDAOImpl customerDAO = new customerDAOImpl();
-            customerDAO.delete(id);
 
-            tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
-            tblCustomers.getSelectionModel().clearSelection();
-            initUI();
+            boolean isDeleted = customerDAO.delete(id);
 
+            if (isDeleted) {
+                tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
+                tblCustomers.getSelectionModel().clearSelection();
+                initUI();
+            }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
     private String generateNewId() {
         try {
 //            Connection connection = DBConnection.getDbConnection().getConnection();
@@ -268,7 +253,6 @@ public class ManageCustomersFormController {
             e.printStackTrace();
         }
 
-
         if (tblCustomers.getItems().isEmpty()) {
             return "C00-001";
         } else {
@@ -276,9 +260,7 @@ public class ManageCustomersFormController {
             int newCustomerId = Integer.parseInt(id.replace("C", "")) + 1;
             return String.format("C00-%03d", newCustomerId);
         }
-
     }
-
     private String getLastCustomerId() {
         List<CustomerTM> tempCustomersList = new ArrayList<>(tblCustomers.getItems());
         Collections.sort(tempCustomersList);

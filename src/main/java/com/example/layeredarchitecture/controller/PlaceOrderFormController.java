@@ -10,6 +10,7 @@ import com.example.layeredarchitecture.dao.custom.impl.customerDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.itemDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 import com.example.layeredarchitecture.util.TransactionConnection;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
@@ -38,8 +39,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
-
 public class PlaceOrderFormController {
 
     public AnchorPane root;
@@ -63,7 +62,7 @@ public class PlaceOrderFormController {
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailsDAO orderDetailDAO = new OrderDetailsDAOImpl();
 
-    public void initialize() throws SQLException, ClassNotFoundException {
+    public void initialize() {
 
         tblOrderDetails.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
         tblOrderDetails.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -122,11 +121,17 @@ public class PlaceOrderFormController {
 //                        rst.next();
 //                        CustomerDTO customerDTO = new CustomerDTO(newValue + "", rst.getString("name"), rst.getString("address"));
 
-//                        txtCustomerName.setText(customerDTO.getName());
-                        CustomerDTO customerDTO = customerDAO.search(newValue + "");
+                        CustomerDTO dto = customerDAO.search(newValue + "");
+
+                        CustomerDTO customerDTO = new CustomerDTO(newValue + "",
+                                dto.getName(),
+                                dto.getAddress());
+
                         txtCustomerName.setText(customerDTO.getName());
+
 //                        String isname = customerDAO.search(newValue);
 //                        txtCustomerName.setText(isname);
+
                     } catch (SQLException e) {
                         new Alert(Alert.AlertType.ERROR, "Failed to find the customer " + newValue + "" + e).show();
                     }
@@ -204,16 +209,13 @@ public class PlaceOrderFormController {
         loadAllCustomerIds();
         loadAllItemCodes();
     }
-
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
 //        pstm.setString(1, code);
 //        return pstm.executeQuery().next();
         return itemDAO.exist(code);
-
     }
-
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
@@ -221,9 +223,7 @@ public class PlaceOrderFormController {
 //        return pstm.executeQuery().next();
 
         return customerDAO.exist(id);
-
     }
-
     public String generateNewOrderId() {
         try {
 //            Connection connection = DBConnection.getDbConnection().getConnection();
@@ -239,7 +239,6 @@ public class PlaceOrderFormController {
         }
         return "OID-001";
     }
-
     private void loadAllCustomerIds() {
         try {
 //            Connection connection = DBConnection.getDbConnection().getConnection();
@@ -262,7 +261,6 @@ public class PlaceOrderFormController {
             e.printStackTrace();
         }
     }
-
     private void loadAllItemCodes() {
         try {
             /*Get all items*/
@@ -283,7 +281,6 @@ public class PlaceOrderFormController {
             e.printStackTrace();
         }
     }
-
     @FXML
     private void navigateToHome(MouseEvent event) throws IOException {
         URL resource = this.getClass().getResource("/com/example/layeredarchitecture/main-form.fxml");
@@ -294,7 +291,6 @@ public class PlaceOrderFormController {
         primaryStage.centerOnScreen();
         Platform.runLater(() -> primaryStage.sizeToScene());
     }
-
     public void btnAdd_OnAction(ActionEvent actionEvent) {
         if (!txtQty.getText().matches("\\d+") || Integer.parseInt(txtQty.getText()) <= 0 ||
                 Integer.parseInt(txtQty.getText()) > Integer.parseInt(txtQtyOnHand.getText())) {
@@ -333,7 +329,6 @@ public class PlaceOrderFormController {
         calculateTotal();
         enableOrDisablePlaceOrderButton();
     }
-
     private void calculateTotal() {
         BigDecimal total = new BigDecimal(0);
 
@@ -342,14 +337,11 @@ public class PlaceOrderFormController {
         }
         lblTotal.setText("Total: " +total);
     }
-
     private void enableOrDisablePlaceOrderButton() {
         btnPlaceOrder.setDisable(!(cmbCustomerId.getSelectionModel().getSelectedItem() != null && !tblOrderDetails.getItems().isEmpty()));
     }
-
     public void txtQty_OnAction(ActionEvent actionEvent) {
     }
-
     public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
                 tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
@@ -368,17 +360,21 @@ public class PlaceOrderFormController {
         txtQty.clear();
         calculateTotal();
     }
-
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         /*Transaction*/
         boolean isOrderSaved;
         boolean isOrderDetailSaved = false;
         boolean isItemUpdated = false;
 //        Connection connection = null;
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setOrderId(orderId);
+        orderDTO.setOrderDate(orderDate);
+        orderDTO.setCustomerId(customerId);
         try {
             orderDAO.selectOrderId(orderId);
 
-            isOrderSaved = orderDAO.saveOrder(orderId, orderDate, customerId);
+            TransactionConnection.getConnection().setAutoCommit(false);
+            isOrderSaved = orderDAO.save(orderDTO);
 
             for (OrderDetailDTO detail : orderDetails) {
                 isOrderDetailSaved = orderDetailDAO.save(orderId, detail);
@@ -392,7 +388,7 @@ public class PlaceOrderFormController {
 
             if (isOrderSaved && isOrderDetailSaved && isItemUpdated) {
                 TransactionConnection.getConnection().commit();
-                TransactionConnection.setAutoCommitTrue();
+                TransactionConnection.getConnection().setAutoCommit(true);
                 return true;
             }
 
@@ -403,7 +399,6 @@ public class PlaceOrderFormController {
         }
         return false;
     }
-
 
     public ItemDTO findItem(String code) {
         try {
@@ -426,4 +421,5 @@ public class PlaceOrderFormController {
         }
         return null;
     }
+
 }

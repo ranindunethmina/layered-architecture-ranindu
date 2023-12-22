@@ -68,7 +68,6 @@ public class ManageItemsFormController {
         txtQtyOnHand.setOnAction(event -> btnSave.fire());
         loadAllItems();
     }
-
     private void loadAllItems() {
         tblItems.getItems().clear();
         try {
@@ -99,7 +98,6 @@ public class ManageItemsFormController {
             e.printStackTrace();
         }
     }
-
     private void initUI() {
         txtCode.clear();
         txtDescription.clear();
@@ -113,7 +111,6 @@ public class ManageItemsFormController {
         btnSave.setDisable(true);
         btnDelete.setDisable(true);
     }
-
     @FXML
     private void navigateToHome(MouseEvent event) throws IOException {
         URL resource = this.getClass().getResource("/com/example/layeredarchitecture/main-form.fxml");
@@ -124,7 +121,6 @@ public class ManageItemsFormController {
         primaryStage.centerOnScreen();
         Platform.runLater(() -> primaryStage.sizeToScene());
     }
-
     public void btnAddNew_OnAction(ActionEvent actionEvent) {
         txtCode.setDisable(false);
         txtDescription.setDisable(false);
@@ -140,7 +136,6 @@ public class ManageItemsFormController {
         btnSave.setText("Save");
         tblItems.getSelectionModel().clearSelection();
     }
-
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         /*Delete Item*/
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
@@ -154,19 +149,19 @@ public class ManageItemsFormController {
 //            pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-            itemDAO.delete(code);
+            boolean isDeleted = itemDAO.delete(code);
 
-            tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
-            tblItems.getSelectionModel().clearSelection();
-            initUI();
-
+            if (isDeleted) {
+                tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
+                tblItems.getSelectionModel().clearSelection();
+                initUI();
+            }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the item " + code).show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
     public void btnSave_OnAction(ActionEvent actionEvent) {
         String code = txtCode.getText();
         String description = txtDescription.getText();
@@ -188,7 +183,6 @@ public class ManageItemsFormController {
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
         BigDecimal unitPrice = new BigDecimal(txtUnitPrice.getText()).setScale(2);
 
-
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
                 if (existItem(code)) {
@@ -209,7 +203,6 @@ public class ManageItemsFormController {
                 if (isSaved) {
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
                 }
-
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             } catch (ClassNotFoundException e) {
@@ -217,7 +210,6 @@ public class ManageItemsFormController {
             }
         } else {
             try {
-
                 if (!existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
@@ -231,24 +223,23 @@ public class ManageItemsFormController {
 //                pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-                itemDAO.update(new ItemDTO(code,description,unitPrice,qtyOnHand));
+                boolean isUpdated = itemDAO.update(new ItemDTO(code,description,unitPrice,qtyOnHand));
 
-                ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
-                selectedItem.setDescription(description);
-                selectedItem.setQtyOnHand(qtyOnHand);
-                selectedItem.setUnitPrice(unitPrice);
-                tblItems.refresh();
+                if (isUpdated) {
+                    ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
+                    selectedItem.setDescription(description);
+                    selectedItem.setQtyOnHand(qtyOnHand);
+                    selectedItem.setUnitPrice(unitPrice);
+                    tblItems.refresh();
+                }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
-
         btnAddNewItem.fire();
     }
-
-
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
@@ -257,8 +248,6 @@ public class ManageItemsFormController {
 //        itemDAOImpl itemDAO = new itemDAOImpl();
         return itemDAO.exist(code);
     }
-
-
     private String generateNewId() {
         try {
 //            Connection connection = DBConnection.getDbConnection().getConnection();
@@ -281,4 +270,5 @@ public class ManageItemsFormController {
         }
         return "I00-001";
     }
+
 }

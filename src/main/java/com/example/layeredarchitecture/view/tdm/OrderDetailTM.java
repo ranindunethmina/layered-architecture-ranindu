@@ -28,39 +28,30 @@ public class OrderDetailTM{
     public void setCode(String code) {
         this.code = code;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
     public int getQty() {
         return qty;
     }
-
     public void setQty(int qty) {
         this.qty = qty;
     }
-
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
-
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
-
     public BigDecimal getTotal() {
         return total;
     }
-
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
-
     @Override
     public String toString() {
         return "OrderDetailTM{" +
@@ -71,4 +62,5 @@ public class OrderDetailTM{
                 ", total=" + total +
                 '}';
     }
+
 }

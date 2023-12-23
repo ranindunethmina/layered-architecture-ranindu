@@ -1,12 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.BOFactory;
-import com.example.layeredarchitecture.bo.placeOrderBO;
-import com.example.layeredarchitecture.bo.placeOrderBOImpl;
-import com.example.layeredarchitecture.dao.custom.*;
-import com.example.layeredarchitecture.dao.custom.impl.*;
+import com.example.layeredarchitecture.bo.custom.placeOrderBO;
 import com.example.layeredarchitecture.model.*;
-import com.example.layeredarchitecture.util.TransactionConnection;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -56,7 +52,7 @@ public class PlaceOrderFormController {
 //    OrderDAO orderDAO = new OrderDAOImpl();
 //    OrderDetailsDAO orderDetailDAO = new OrderDetailsDAOImpl();
 //    QueryDAO queryDAO = new QueryDAOImpl();
-    placeOrderBO placeOrderBO = (com.example.layeredarchitecture.bo.placeOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLACEORDER);
+    placeOrderBO placeOrderBO = (com.example.layeredarchitecture.bo.custom.placeOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLACEORDER);
 
     public void initialize() {
 

@@ -86,7 +86,7 @@ public class ManageItemsFormController {
 //            }
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-            ArrayList<ItemDTO> allItem = itemBO.getAll();
+            ArrayList<ItemDTO> allItem = itemBO.getAllItem();
 
             for (ItemDTO dto :allItem){
                 tblItems.getItems().add(
@@ -155,7 +155,7 @@ public class ManageItemsFormController {
 //            pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-            boolean isDeleted = itemBO.delete(code);
+            boolean isDeleted = itemBO.deleteItem(code);
 
             if (isDeleted) {
                 tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
@@ -204,7 +204,7 @@ public class ManageItemsFormController {
 //                pstm.executeUpdate();
 //                itemDAOImpl itemDAO = new itemDAOImpl();
 
-                boolean isSaved = itemBO.save(new ItemDTO(code, description, unitPrice,qtyOnHand));
+                boolean isSaved = itemBO.saveItem(new ItemDTO(code, description, unitPrice,qtyOnHand));
 
                 if (isSaved) {
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
@@ -229,7 +229,7 @@ public class ManageItemsFormController {
 //                pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-                boolean isUpdated = itemBO.update(new ItemDTO(code,description,unitPrice,qtyOnHand));
+                boolean isUpdated = itemBO.updateItem(new ItemDTO(code,description,unitPrice,qtyOnHand));
 
                 if (isUpdated) {
                     ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
@@ -252,7 +252,7 @@ public class ManageItemsFormController {
 //        pstm.setString(1, code);
 //        return pstm.executeQuery().next();
 //        itemDAOImpl itemDAO = new itemDAOImpl();
-        return itemBO.exist(code);
+        return itemBO.existItem(code);
     }
     private String generateNewId() {
         try {
@@ -260,7 +260,7 @@ public class ManageItemsFormController {
 //            ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-            ResultSet rst = itemBO.generateId();
+            ResultSet rst = itemBO.generateItemId();
 
             if (rst.next()) {
                 String id = rst.getString("code");

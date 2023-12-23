@@ -80,7 +80,7 @@ public class ManageCustomersFormController {
 //            }
 //            customerDAOImpl customerDAO= new customerDAOImpl();
 
-            ArrayList<CustomerDTO> allCustomer = customerBO.getAll();
+            ArrayList<CustomerDTO> allCustomer = customerBO.getAllCustomer();
 
             for (CustomerDTO dto :allCustomer){
                 tblCustomers.getItems().add(
@@ -161,7 +161,7 @@ public class ManageCustomersFormController {
 //                customerDAOImpl customerDAO = new customerDAOImpl();
 
 //                customerBOImpl customerBO=new customerBOImpl();
-                boolean isSaved = customerBO.save(new CustomerDTO(id, name, address));
+                boolean isSaved = customerBO.saveCustomer(new CustomerDTO(id, name, address));
 
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
@@ -186,7 +186,7 @@ public class ManageCustomersFormController {
 //                pstm.executeUpdate();
 //                customerDAOImpl customerDAO = new customerDAOImpl();
 
-                  customerBO.update(new CustomerDTO(id, name, address));
+                  customerBO.updateCustomer(new CustomerDTO(id, name, address));
 
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
@@ -208,7 +208,7 @@ public class ManageCustomersFormController {
 //        pstm.setString(1, id);
 //        return pstm.executeQuery().next();
 //        customerDAOImpl customerDAO = new customerDAOImpl();
-        return customerBO.exist(id);
+        return customerBO.existCustomer(id);
     }
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         /*Delete Customer*/
@@ -223,7 +223,7 @@ public class ManageCustomersFormController {
 //            pstm.executeUpdate();
 //            customerDAOImpl customerDAO = new customerDAOImpl();
 
-            boolean isDeleted = customerBO.delete(id);
+            boolean isDeleted = customerBO.deleteCustomer(id);
 
             if (isDeleted) {
                 tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
@@ -242,7 +242,7 @@ public class ManageCustomersFormController {
 //            ResultSet rst = connection.createStatement().executeQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
 //            customerDAOImpl customerDAO = new customerDAOImpl();
 
-        ResultSet rst = customerBO.generateId();
+        ResultSet rst = customerBO.generateCustomerId();
 
             if (rst.next()) {
                 String id = rst.getString("id");

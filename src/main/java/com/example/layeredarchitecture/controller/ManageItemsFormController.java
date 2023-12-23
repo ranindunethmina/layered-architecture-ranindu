@@ -1,5 +1,9 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.bo.customerBO;
+import com.example.layeredarchitecture.bo.customerBOImpl;
+import com.example.layeredarchitecture.bo.itemBO;
+import com.example.layeredarchitecture.bo.itemBOImpl;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.impl.itemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -36,7 +40,9 @@ public class ManageItemsFormController {
     public TableView<ItemTM> tblItems;
     public TextField txtUnitPrice;
     public JFXButton btnAddNewItem;
-    ItemDAO itemDAO = new itemDAOImpl();
+
+    //ItemDAO itemDAO = new itemDAOImpl();
+    itemBO itemBO = new itemBOImpl();
 
 
     public void initialize() {
@@ -80,7 +86,7 @@ public class ManageItemsFormController {
 //            }
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-            ArrayList<ItemDTO> allItem = itemDAO.getAll();
+            ArrayList<ItemDTO> allItem = itemBO.getAll();
 
             for (ItemDTO dto :allItem){
                 tblItems.getItems().add(
@@ -149,7 +155,7 @@ public class ManageItemsFormController {
 //            pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-            boolean isDeleted = itemDAO.delete(code);
+            boolean isDeleted = itemBO.delete(code);
 
             if (isDeleted) {
                 tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
@@ -198,7 +204,7 @@ public class ManageItemsFormController {
 //                pstm.executeUpdate();
 //                itemDAOImpl itemDAO = new itemDAOImpl();
 
-                boolean isSaved = itemDAO.save(new ItemDTO(code, description, unitPrice,qtyOnHand));
+                boolean isSaved = itemBO.save(new ItemDTO(code, description, unitPrice,qtyOnHand));
 
                 if (isSaved) {
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
@@ -223,7 +229,7 @@ public class ManageItemsFormController {
 //                pstm.executeUpdate();
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-                boolean isUpdated = itemDAO.update(new ItemDTO(code,description,unitPrice,qtyOnHand));
+                boolean isUpdated = itemBO.update(new ItemDTO(code,description,unitPrice,qtyOnHand));
 
                 if (isUpdated) {
                     ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
@@ -246,7 +252,7 @@ public class ManageItemsFormController {
 //        pstm.setString(1, code);
 //        return pstm.executeQuery().next();
 //        itemDAOImpl itemDAO = new itemDAOImpl();
-        return itemDAO.exist(code);
+        return itemBO.exist(code);
     }
     private String generateNewId() {
         try {
@@ -254,7 +260,7 @@ public class ManageItemsFormController {
 //            ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
 //            itemDAOImpl itemDAO = new itemDAOImpl();
 
-            ResultSet rst = itemDAO.generateId();
+            ResultSet rst = itemBO.generateId();
 
             if (rst.next()) {
                 String id = rst.getString("code");

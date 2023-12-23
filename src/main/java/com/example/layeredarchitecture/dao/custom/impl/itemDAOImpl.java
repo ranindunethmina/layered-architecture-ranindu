@@ -40,6 +40,7 @@ public class itemDAOImpl implements ItemDAO {
 //        return pstm.executeUpdate() > 0;
         return SQLUtil.excute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",itemDTO.getCode(),itemDTO.getDescription(),itemDTO.getUnitPrice(),itemDTO.getQtyOnHand());
     }
+
     public boolean update(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
@@ -51,6 +52,7 @@ public class itemDAOImpl implements ItemDAO {
 //        return pstm.executeUpdate() > 0;
         return SQLUtil.excute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",itemDTO.getDescription(),itemDTO.getUnitPrice(),itemDTO.getQtyOnHand(),itemDTO.getCode());
     }
+
     public boolean exist(String code) throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
@@ -69,6 +71,7 @@ public class itemDAOImpl implements ItemDAO {
 //        pstm.executeUpdate();
        return SQLUtil.excute("DELETE FROM Item WHERE code=?",code);
     }
+
     public ResultSet generateId() throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");

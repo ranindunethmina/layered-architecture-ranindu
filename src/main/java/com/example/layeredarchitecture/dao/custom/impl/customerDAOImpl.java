@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class customerDAOImpl implements CustomerDAO {
+
     @Override
     public ArrayList<CustomerDTO> getAll() throws SQLException, ClassNotFoundException {
 //        Connection connection = DBConnection.getDbConnection().getConnection();

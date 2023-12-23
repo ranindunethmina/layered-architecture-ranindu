@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.bo.BOFactory;
 import com.example.layeredarchitecture.bo.customerBO;
 import com.example.layeredarchitecture.bo.customerBOImpl;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
@@ -38,8 +39,8 @@ public class ManageCustomersFormController {
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
     //CustomerDAO customerDAO= new customerDAOImpl(); //property injection
-     customerBO customerBO=new customerBOImpl();
 
+    customerBO customerBO = (com.example.layeredarchitecture.bo.customerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));

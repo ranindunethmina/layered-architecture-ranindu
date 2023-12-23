@@ -1,9 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.bo.customerBO;
-import com.example.layeredarchitecture.bo.customerBOImpl;
-import com.example.layeredarchitecture.bo.itemBO;
-import com.example.layeredarchitecture.bo.itemBOImpl;
+import com.example.layeredarchitecture.bo.*;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.impl.itemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -42,7 +39,7 @@ public class ManageItemsFormController {
     public JFXButton btnAddNewItem;
 
     //ItemDAO itemDAO = new itemDAOImpl();
-    itemBO itemBO = new itemBOImpl();
+    itemBO itemBO = (com.example.layeredarchitecture.bo.itemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
 
 
     public void initialize() {

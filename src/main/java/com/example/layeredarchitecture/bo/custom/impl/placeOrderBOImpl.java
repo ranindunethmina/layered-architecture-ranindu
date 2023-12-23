@@ -3,10 +3,10 @@ package com.example.layeredarchitecture.bo.custom.impl;
 import com.example.layeredarchitecture.bo.custom.placeOrderBO;
 import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.*;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.dto.ItemDTO;
+import com.example.layeredarchitecture.dto.OrderDTO;
+import com.example.layeredarchitecture.dto.OrderDetailDTO;
+import com.example.layeredarchitecture.entity.Customer;
 import com.example.layeredarchitecture.util.TransactionConnection;
 
 import java.sql.ResultSet;
@@ -61,9 +61,10 @@ public class placeOrderBOImpl implements placeOrderBO {
     }
 
     @Override
-    public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
+    public Customer searchCustomer(String id) throws SQLException, ClassNotFoundException {
         return customerDAO.search(id);
     }
+
 
     @Override
     public ItemDTO searchItem(String code) throws SQLException, ClassNotFoundException {
@@ -86,7 +87,7 @@ public class placeOrderBOImpl implements placeOrderBO {
     }
 
     @Override
-    public ArrayList<CustomerDTO> getAllCustomer() throws SQLException, ClassNotFoundException {
+    public ArrayList<Customer> getAllCustomer() throws SQLException, ClassNotFoundException {
         return customerDAO.getAll();
     }
 
@@ -97,7 +98,6 @@ public class placeOrderBOImpl implements placeOrderBO {
 
     public ItemDTO findItem(String code) {
         try {
-
             ItemDTO dto = itemDAO.search(code);
 
             return new ItemDTO(code,
